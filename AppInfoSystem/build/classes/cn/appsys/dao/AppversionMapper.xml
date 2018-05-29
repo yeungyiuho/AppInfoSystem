@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.appsys.dao.AppversionMapper">
+	<insert id="addVersion" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO `appinfodb`.`app_version`
+		(
+		`appId`,
+		`versionNo`,
+		`versionInfo`,
+		`publishStatus`,
+		`downloadLink`,
+		`versionSize`,
+		`createdBy`,
+		`creationDate`,
+		`modifyBy`,
+		`modifyDate`,
+		`apkLocPath`,
+		`apkFileName`
+		)
+		VALUES
+		(
+		#{appId},
+		#{versionNo},
+		#{versionInfo},
+		#{publishStatus},
+		#{downloadLink},
+		#{versionSize},
+		#{createdBy},
+		#{creationDate},
+		#{modifyBy},
+		#{modifyDate},
+		#{apkLocPath},
+		#{apkFileName}
+		)
+	</insert>
+	<select id="getAppVersionId" resultType="AppVersion">
+		SELECT v.*,i.softwareName appName,(SELECT d.valueName FROM data_dictionary d
+		WHERE d.valueId=v.publishStatus AND d.typeCode='PUBLISH_STATUS')
+		publishStatusName
+		FROM app_version v,app_info i WHERE i.id=v.appId AND
+		v.appId=#{appId} ORDER BY modifyDate
+	</select>
+	<select id="getVerSionId" resultType="AppVersion">
+		SELECT
+		*
+		FROM `app_version`
+		where id=#{id}
+	</select>
+	<update id="updateVersion" >
+		UPDATE `app_version`
+		SET
+		`appId` = #{appId} , 
+	`versionNo` = #{versionNo} , 
+	`versionInfo` = #{versionInfo} , 
+	`publishStatus` = #{publishStatus} , 
+	`downloadLink` = #{downloadLink} , 
+	`versionSize` = #{versionSize} , 
+		`modifyBy` =#{modifyBy},
+		`modifyDate` =#{modifyDate},
+		`apkLocPath` =#{apkLocPath},
+		`apkFileName` =#{apkFileName}
+		WHERE
+		`id` =#{id}
+	</update>
+</mapper>
